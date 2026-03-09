@@ -1,3 +1,6 @@
+<img width="1408" height="768" alt="Gemini_Generated_Image_tj47zbtj47zbtj47" src="https://github.com/user-attachments/assets/401cb34d-bd50-48f7-91f2-cd60e033f378" />
+
+
 # react-native-sprinkle-toast
 
 Premium, ultra-slim, and highly customizable animated pill toast for React Native. This library features interactive animations, beautiful particle effects, and a modern aesthetic inspired by contemporary mobile UI trends.
