@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useMemo } from 'react';
-import { Animated, StyleSheet, View, Easing, ColorValue, Text, Dimensions } from 'react-native';
+import { Animated, StyleSheet, View, Easing, Text, Dimensions } from 'react-native';
+import type { ColorValue } from 'react-native'; // Added type-only import
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const TOAST_WIDTH = SCREEN_WIDTH * 0.9;
@@ -10,17 +11,17 @@ interface Props {
   style?: SprinkleStyle;
   customColor?: ColorValue;
   overflow?: boolean;
-  duration?: number; 
+  duration?: number;
 }
 
 export const Sprinkles: React.FC<Props> = ({ 
   style = 'default', 
   customColor, 
   overflow = false,
-  duration = 1200 // Default duration 1.2 seconds
+  duration = 1200 
 }) => {
   const particleCount = style === 'emojis' ? 10 : 20;
-  const particles = Array.from({ length: particleCount });
+  const particles = useMemo(() => Array.from({ length: particleCount }), [particleCount]);
   
   const animations = useRef<Animated.Value[]>(
     particles.map(() => new Animated.Value(0))
@@ -29,31 +30,33 @@ export const Sprinkles: React.FC<Props> = ({
   const confettiColors = ['#FFD700', '#FF69B4', '#00FA9A', '#1E90FF', '#FF4500', '#9B59B6'];
 
   const particleMeta = useMemo(() => particles.map(() => ({
-    emoji: ['🎉', '✨', '🔥', '💎', '🚀', '⭐', '🎈'][Math.floor(Math.random() * 7)],
+    emoji: ['🎉', '✨', '🔥', '💎', '🚀', '⭐', '🎈'][Math.floor(Math.random() * 7)] || '✨',
     startX: (Math.random() - 0.5) * (TOAST_WIDTH * 0.85), 
     startY: (Math.random() - 0.5) * 30,
     moveX: (Math.random() - 0.5) * 60,
     moveY: overflow ? (Math.random() - 1) * 80 : (Math.random() - 0.5) * 40, 
     randomRotate: `${Math.random() * 360}deg`,
-    // Delay 30% random between 0 and 30% of the total duration to create a more natural effect
     randomDelay: Math.random() * (duration * 0.3),
-    color: confettiColors[Math.floor(Math.random() * confettiColors.length)]
-  })), [style, overflow, duration]);
+    color: confettiColors[Math.floor(Math.random() * confettiColors.length)] || '#FFD700'
+  })), [particles, overflow, duration]);
 
   useEffect(() => {
-    const anims = animations.map((anim, i) =>
-      Animated.timing(anim, {
+    const anims = animations.map((anim, i) => {
+      const meta = particleMeta[i];
+      return Animated.timing(anim, {
         toValue: 1,
-        duration: duration + particleMeta[i].randomDelay,
+        duration: duration + (meta?.randomDelay ?? 0), // Added optional chaining/fallback
         easing: Easing.out(Easing.cubic),
         useNativeDriver: true,
-      })
-    );
+      });
+    });
     Animated.parallel(anims).start();
-  }, [animations, duration]);
+  }, [animations, duration, particleMeta]);
 
   const getParticleStyle = (index: number, anim: Animated.Value) => {
     const meta = particleMeta[index];
+    if (!meta) return {}; // Safety check
+
     const opacity = anim.interpolate({
       inputRange: [0, 0.2, 0.8, 1],
       outputRange: [0, 1, 1, 0],
@@ -82,12 +85,15 @@ export const Sprinkles: React.FC<Props> = ({
     <View style={styles.container} pointerEvents="none">
        {particles.map((_, i) => {
          const anim = animations[i];
+         const meta = particleMeta[i];
+         if (!anim || !meta) return null; // Safety check for TS
+
          const pStyle = getParticleStyle(i, anim);
 
          if (style === 'emojis') {
              return (
                  <Animated.View key={i} style={pStyle}>
-                     <Text style={{ fontSize: 16 }}>{particleMeta[i].emoji}</Text>
+                     <Text style={{ fontSize: 16 }}>{meta.emoji}</Text>
                  </Animated.View>
              );
          }
@@ -101,7 +107,7 @@ export const Sprinkles: React.FC<Props> = ({
                     width: style === 'stars' ? 4 : 6, 
                     height: style === 'stars' ? 4 : 6, 
                     borderRadius: 3,
-                    backgroundColor: customColor || (style === 'stars' ? '#FFF' : particleMeta[i].color),
+                    backgroundColor: (customColor as any) || (style === 'stars' ? '#FFF' : meta.color),
                     shadowColor: style === 'stars' ? '#FFF' : 'transparent',
                     shadowRadius: 4, shadowOpacity: 0.8, elevation: 5
                 }

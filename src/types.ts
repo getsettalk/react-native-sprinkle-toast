@@ -1,5 +1,4 @@
-import { SprinkleStyle } from './Sprinkles';
-
+import type { SprinkleStyle } from './Sprinkles';
 /**
  * Defines the status types for the toast, influencing its default color and iconography.
  */

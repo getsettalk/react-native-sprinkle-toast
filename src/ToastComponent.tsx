@@ -9,7 +9,7 @@ import {
   useColorScheme,
   Platform 
 } from 'react-native';
-import { ToastOptions, ToastType } from './types';
+import type { ToastOptions, ToastType } from './types';
 
 const { width } = Dimensions.get('window');
 

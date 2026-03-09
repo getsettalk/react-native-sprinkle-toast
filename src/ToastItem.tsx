@@ -1,37 +1,38 @@
 import React, { useEffect, useRef } from 'react';
-import { 
-  Animated, 
-  Text, 
-  StyleSheet, 
-  View, 
-  TouchableOpacity, 
-  Dimensions, 
-  Platform, 
-  ViewStyle, 
-  useColorScheme 
+import {
+  Animated,
+  Text,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Dimensions,
+  Platform,
+  useColorScheme
 } from 'react-native';
-import { ToastOptions, ToastType } from './types';
+import type { ViewStyle } from 'react-native'; // Added 'type'
+import type { ToastOptions, ToastType } from './types'; // Added 'type'
+
 import { Sprinkles } from './Sprinkles';
 
 const { width } = Dimensions.get('window');
 
 export const ToastItem: React.FC<ToastOptions & { onRemove: (id: string) => void }> = (props) => {
-  const { 
-    id, 
-    message, 
-    type = 'simple', 
-    duration = 3000, 
+  const {
+    id,
+    message,
+    type = 'simple',
+    duration = 3000,
     position = 'top',
-    showProgress = true, 
-    showCloseButton = true, 
-    backgroundColor, 
-    textColor, 
-    progressBarColor, 
-    onRemove, 
-    showSprinkles, 
+    showProgress = true,
+    showCloseButton = true,
+    backgroundColor,
+    textColor,
+    progressBarColor,
+    onRemove,
+    showSprinkles,
     sprinkleStyle,
-    sprinkleOverflow = false ,
-    sprinkleDuration = 1200 
+    sprinkleOverflow = false,
+    sprinkleDuration = 1200
   } = props;
 
   const isDark = useColorScheme() === 'dark';
@@ -48,10 +49,10 @@ export const ToastItem: React.FC<ToastOptions & { onRemove: (id: string) => void
 
     // Progress Bar Animation
     if (showProgress) {
-      Animated.timing(progressWidth, { 
-        toValue: 1, 
-        duration: duration, 
-        useNativeDriver: false 
+      Animated.timing(progressWidth, {
+        toValue: 1,
+        duration: duration,
+        useNativeDriver: false
       }).start();
     }
 
@@ -89,25 +90,26 @@ export const ToastItem: React.FC<ToastOptions & { onRemove: (id: string) => void
 
   return (
     <View style={styles.wrapper} pointerEvents="box-none">
-      <Animated.View 
+      <Animated.View
         style={[
-          styles.card, 
+          styles.card,
           getPositionStyle(),
-          { 
-            opacity, 
-            transform: [{ translateY: transAnim }], 
+          {
+            opacity,
+            transform: [{ translateY: transAnim }],
             backgroundColor: finalBgColor,
             // Overflow 'visible' allow us to sprinkles out of the toast bounds, otherwise they get clipped
-            overflow: sprinkleOverflow ? 'visible' : 'hidden' 
+            overflow: sprinkleOverflow ? 'visible' : 'hidden'
           }
         ]}
       >
         {/* Sprinkles Container - Renders behind or over the text based on Z-index */}
-        {type === 'success' && showSprinkles && (
-          <Sprinkles 
-            style={sprinkleStyle} 
-            customColor={textColor} 
-            overflow={sprinkleOverflow} 
+        {showSprinkles && type === 'success' && (
+          <Sprinkles
+            // Fix for exactOptionalPropertyTypes: only pass if defined
+            {...(sprinkleStyle ? { style: sprinkleStyle } : {})}
+            {...(textColor ? { customColor: textColor } : {})}
+            overflow={sprinkleOverflow}
             duration={sprinkleDuration}
           />
         )}
@@ -116,26 +118,26 @@ export const ToastItem: React.FC<ToastOptions & { onRemove: (id: string) => void
           <Text style={[styles.msg, { color: finalTextColor }]}>{message}</Text>
           {showCloseButton && (
             <TouchableOpacity onPress={hide} style={styles.closeArea}>
-              <Text style={{color: finalTextColor, fontSize: 18, fontWeight: 'bold'}}>✕</Text>
+              <Text style={{ color: finalTextColor, fontSize: 18, fontWeight: 'bold' }}>✕</Text>
             </TouchableOpacity>
           )}
         </View>
-        
+
         {/* Smart Progress Bar */}
         {showProgress && (
           <View style={styles.progContainer}>
             <View style={styles.progBg}>
-              <Animated.View 
+              <Animated.View
                 style={[
-                  styles.progBar, 
-                  { 
-                    width: progressWidth.interpolate({ 
-                        inputRange: [0, 1], 
-                        outputRange: ['0%', '100%'] 
-                    }), 
+                  styles.progBar,
+                  {
+                    width: progressWidth.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: ['0%', '100%']
+                    }),
                     backgroundColor: progressBarColor || finalTextColor,
                   }
-                ]} 
+                ]}
               />
             </View>
           </View>
@@ -146,36 +148,36 @@ export const ToastItem: React.FC<ToastOptions & { onRemove: (id: string) => void
 };
 
 const styles = StyleSheet.create({
-  wrapper: { 
-    ...StyleSheet.absoluteFillObject, 
-    zIndex: 9999999, 
-    elevation: 10 
+  wrapper: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 9999999,
+    elevation: 10
   },
-  card: { 
-    position: 'absolute', 
-    width: width * 0.9, 
-    alignSelf: 'center', 
-    borderRadius: 12, 
-    elevation: 10, 
-    shadowColor: '#000', 
-    shadowOpacity: 0.2, 
-    shadowRadius: 10, 
+  card: {
+    position: 'absolute',
+    width: width * 0.9,
+    alignSelf: 'center',
+    borderRadius: 12,
+    elevation: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
     shadowOffset: { width: 0, height: 4 },
     zIndex: 10,
   },
-  row: { 
-    flexDirection: 'row', 
-    padding: 10, 
+  row: {
+    flexDirection: 'row',
+    padding: 10,
     paddingBottom: 16, // Extra padding for progress bar space
-    alignItems: 'center' 
+    alignItems: 'center'
   },
-  msg: { 
-    flex: 1, 
-    fontWeight: '600', 
-    fontSize: 14 
+  msg: {
+    flex: 1,
+    fontWeight: '600',
+    fontSize: 14
   },
-  closeArea: { 
-    paddingLeft: 10 
+  closeArea: {
+    paddingLeft: 10
   },
   progContainer: {
     position: 'absolute',
@@ -186,14 +188,14 @@ const styles = StyleSheet.create({
     // Card ki radius se matching clipping
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 12,
-    overflow: 'hidden', 
+    overflow: 'hidden',
   },
-  progBg: { 
-    height: '100%', 
-    backgroundColor: 'rgba(0,0,0,0.1)' 
+  progBg: {
+    height: '100%',
+    backgroundColor: 'rgba(0,0,0,0.1)'
   },
-  progBar: { 
-    height: '100%', 
-    opacity: 0.7 
+  progBar: {
+    height: '100%',
+    opacity: 0.7
   }
 });

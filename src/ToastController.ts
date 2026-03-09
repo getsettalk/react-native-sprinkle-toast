@@ -1,4 +1,4 @@
-import { ToastOptions } from './types';
+import type { ToastOptions } from './types';
 
 export type ToastRef = {
   addToast: (options: ToastOptions) => void;

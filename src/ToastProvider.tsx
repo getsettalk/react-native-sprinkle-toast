@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { ToastItem } from './ToastItem';
-import { ToastOptions } from './types';
+import type { ToastOptions } from './types';
 import { setToastRef } from './ToastController'; 
 
 export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
