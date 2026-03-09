@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    /* File Layout */
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    /* Environment Settings */
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "lib": ["esnext"],
+    "jsx": "react-jsx",
+    "types": ["react", "react-native"],
+
+    /* Output Quality (Important for NPM) */
+    "sourceMap": true,
+    "declaration": true,        // Yeh user ko types provide karega
+    "declarationMap": true,
+    "emitDeclarationOnly": false, 
+
+    /* Interop Checks */
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+
+    /* Stricter Typechecking */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "skipLibCheck": true,
+
+    /* Style & Safety */
+    "isolatedModules": true,    // React Native ke liye zaroori hai
+    "verbatimModuleSyntax": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", "example"]
+}

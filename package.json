@@ -1,0 +1,42 @@
+{
+  "name": "react-native-sprinkle-toast",
+  "version": "1.0.0",
+  "description": "A premium, slim animated toast with sprinkles for React Native",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react-native",
+    "toast",
+    "animated-toast",
+    "pill-toast",
+    "sprinkles",
+    "confetti",
+    "ui-component",
+    "notification"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getsettalk/react-native-sprinkle-toast.git"
+  },
+  "bugs": {
+    "url": "https://github.com/getsettalk/react-native-sprinkle-toast/issues"
+  },
+  "homepage": "https://github.com/getsettalk/react-native-sprinkle-toast#readme",
+  "author": "Sujeet Kumar",
+  "license": "MIT",
+  "type": "module",
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-native": "^0.72.8",
+    "typescript": "^5.9.3"
+  }
+}
