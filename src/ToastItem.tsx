@@ -77,19 +77,20 @@ export const ToastItem: React.FC<ToastOptions & { onRemove: (id: string) => void
   };
 
   const getPositionStyle = (): ViewStyle => {
-    switch (position) {
-      case 'top': return { top: Platform.OS === 'android' ? 50 : 60 };
-      case 'bottom': return { bottom: 60 };
-      case 'center': return { top: '45%' as any };
-      default: return { top: 40 };
-    }
-  };
+   switch (position) {
+     case 'top': return { top: 0 };
+     case 'bottom': return { bottom: 0 };
+     case 'center': return { top: '45%' as any };
+     default: return { top: 5 };
+   }
+ };
+
 
   const finalBgColor = backgroundColor || getThemeColors(type);
   const finalTextColor = textColor || (type === 'simple' ? (isDark ? '#000' : '#FFF') : '#FFF');
 
   return (
-    <View style={styles.wrapper} pointerEvents="box-none">
+    <View style={[StyleSheet.absoluteFill, styles.wrapper]} pointerEvents="box-none">
       <Animated.View
         style={[
           styles.card,
@@ -149,7 +150,6 @@ export const ToastItem: React.FC<ToastOptions & { onRemove: (id: string) => void
 
 const styles = StyleSheet.create({
   wrapper: {
-    ...StyleSheet.absoluteFillObject,
     zIndex: 9999999,
     elevation: 10
   },
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     padding: 10,
-    paddingBottom: 16, // Extra padding for progress bar space
+    // paddingBottom: 16, // Extra padding for progress bar space
     alignItems: 'center'
   },
   msg: {

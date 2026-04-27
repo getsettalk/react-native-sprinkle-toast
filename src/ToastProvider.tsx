@@ -31,7 +31,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   return (
     <View style={{ flex: 1 }}>
       {children}
-      <View style={styles.overlay} pointerEvents="box-none">
+      <View style={[StyleSheet.absoluteFill, styles.overlay]} pointerEvents="box-none">
         {toasts.map(t => (
           <ToastItem key={t.id} {...t} onRemove={removeToast} />
         ))}
@@ -42,7 +42,6 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
 const styles = StyleSheet.create({
   overlay: {
-    ...StyleSheet.absoluteFillObject,
     zIndex: 999999,
     elevation: 999999,
     justifyContent: 'flex-start',
